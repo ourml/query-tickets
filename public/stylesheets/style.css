@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  font: 13px/1.5 Microsoft YaHei, tahoma, arial, Hiragino Sans GB, \\5b8b\4f53, sans-serif;
+  color: #6c6f73;
+}
+
+.footer {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 5rem;
+  border-top: 1px solid #eee;
+}
+
+@media screen and (min-width: 768px) {
+  .footer {
+    padding-right: 1rem;
+    margin-right: 1rem;
+    padding-left: 0;
+  }
+}

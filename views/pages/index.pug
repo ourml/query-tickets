@@ -1,0 +1,138 @@
+extends ../layout
+
+block content
+  include ../includes/navbar
+
+  
+  .jumbotron.d-none.d-lg-block
+    .container
+      .row
+        h1.display-3 Hello World!
+        p This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.
+        p
+          a.btn.btn-primary.btn-lg(href='#', role='button') Learn more &raquo;
+  
+  
+  
+  .container.mt-3.mb-3
+    .row
+      .col-12.text-center
+        .btn-group(role='group')
+          //- round trip ticket
+          button(type='button', data-toggle='modal', data-target='#doubleTrip').btn.btn-lg.btn-outline-info 往返票
+          //- Modal content begin
+          .modal.fade#doubleTrip(tabindex='-1', role='dialog', aria-labelledby='doubleTripTitle', aria-hidden='true')
+            .modal-dialog(role='document')
+              .modal-content
+                //- modal header
+                .modal-header
+                  h3.display-6#doubleTripTitle 往返票查询
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                //- modal body
+                .modal-body
+                  .container-fluid
+                    form(action='/query', method='get')
+                      .form-row
+                        .form-group.col-md-6
+                          label(for='fromStation') 出发站
+                          input(type='text',name='fromStation' placeholder='起点城市/车站名').form-control#fromStation
+                        .form-group.col-md-6
+                          label(for='toStation') 目的站
+                          input(type='text',name='toStation' placeholder='终点城市/车站名').form-control#toStation
+                        .form-group.col-md-6
+                          label(for='outDate') 出发日期
+                          input(type='text', name='outDate').form-control#outDate
+                        .form-group.col-md-6
+                          label(for='inDate') 返程日期
+                          input(type='text', name='inDate').form-control#inDate
+                        .form-group.col-md-6
+                          .btn-group(data-toggle='buttons').mt-1
+                            label.btn.btn-outline-info.active
+                              input(type='radio', name='ticketType', autocomplete='off', value='adult', checked)#adult
+                              | 普通票
+                            label.btn.btn-outline-info.mr-1
+                              input(type='radio', name='ticketType', autocomplete='off', value='student')#student
+                              | 学生票
+                        .form-group.col-md-6
+                          .btn-group(data-toggle='buttons').mt-1
+                            label.btn.btn-outline-info.active
+                              input(type='radio',name='trainType', autocomplete='off', value='allTrain', checked)
+                              | 全部车次
+                            label.btn.btn-outline-info
+                              input(type='radio',name='trainType', value='tgdc', autocomplete='off')
+                              | 快速
+                            label.btn.btn-outline-info
+                              input(type='radio',name='trainType', value='zk', autocomplete='off')
+                              | 普快
+                            label.btn.btn-outline-info
+                              input(type='radio',name='trainType', value='others', autocomplete='off')
+                              | 其他
+                        .form-group.col-12.text-center
+                          button(type='submit').btn.btn-lg.btn-outline-success.btn-block 查询
+                //- modal footer
+                .modal-footer
+                  button.btn.btn-outline-danger(type='button', data-dismiss='modal') 取消
+          button(type='button').btn.btn-lg.btn-outline-info.active 单程票
+    //- query single trip ticket form
+    .row.mt-3
+      .col-12
+        .card
+          .card-header
+            h3.text-center 单程票查询
+          .card-body
+            .container-fluid
+              form(action='/query', method='get')
+                .form-row
+                  .form-group.col-md-6
+                    label(for='fromStation') 出发站
+                    input(type='text',name='fromStation' placeholder='请输入起点城市/车站名').form-control#fromStation
+                  .form-group.col-md-6
+                    label(for='toStation') 目的站
+                    input(type='text',name='toStation' placeholder='请输入终点城市/车站名').form-control#toStation
+                  .form-group.col-md-6
+                    label(for='date') 日期
+                    input(type='text', name='date').form-control#date
+                  .form-group.col-md-6.align-self-end
+                    .btn-group(data-toggle='buttons').mt-1
+                      label.btn.btn-outline-info.active
+                        input(type='radio', name='ticketType', autocomplete='off', value='adult', checked)#adult
+                        | 普通票
+                      label.btn.btn-outline-info.mr-1
+                        input(type='radio', name='ticketType', autocomplete='off', value='student')#student
+                        | 学生票
+                    .btn-group(data-toggle='buttons').mt-1
+                      label.btn.btn-outline-info.active
+                        input(type='radio',name='trainType', autocomplete='off', value='allTrain', checked)
+                        | 全部车次
+                      label.btn.btn-outline-info
+                        input(type='radio',name='trainType', value='tgdc', autocomplete='off')
+                        | 快速
+                      label.btn.btn-outline-info
+                        input(type='radio',name='trainType', value='zk', autocomplete='off')
+                        | 普快
+                      label.btn.btn-outline-info
+                        input(type='radio',name='trainType', value='others', autocomplete='off')
+                        | 其他
+                  .form-group.col-12.text-center
+                    button(type='submit').btn.btn-lg.btn-outline-success.btn-block 查询
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  include ../includes/footer
