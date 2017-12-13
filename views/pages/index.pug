@@ -3,7 +3,6 @@ extends ../layout
 block content
   include ../includes/navbar
 
-  
   .jumbotron.d-none.d-lg-block
     .container
       .row
@@ -32,7 +31,7 @@ block content
                 //- modal body
                 .modal-body
                   .container-fluid
-                    form(action='/query', method='get')
+                    form(action='/query', method='post')
                       .form-row
                         .form-group.col-md-6
                           label(for='fromStation') 出发站
@@ -82,7 +81,7 @@ block content
             h3.text-center 单程票查询
           .card-body
             .container-fluid
-              form(action='/query', method='get')
+              form(action='/query', method='post')
                 .form-row
                   .form-group.col-md-6
                     label(for='fromStation') 出发站

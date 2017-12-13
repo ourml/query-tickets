@@ -5,5 +5,8 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   res.render('query', { title: '火车票查询信息' });
 });
+router.post('/', function(req, res, next) {
+  res.render('query', {title: '车票详情页'})
+})
 
 module.exports = router;
