@@ -4,6 +4,9 @@ html
     title= title
     meta(charset='utf-8')
     meta( name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
-    include includes/head.pug
+    include includes/head
   body
+    include ./includes/navbar
     block content
+    a.to-top.text-white 顶部 ↑
+    include ./includes/footer

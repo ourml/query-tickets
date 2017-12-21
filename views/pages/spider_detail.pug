@@ -1,0 +1,183 @@
+extends ../layout
+
+block content
+  .container.mt-3
+    .jumbotron
+      // h3.text-secondary.display-5.text-center 爬虫控制台
+      
+      case dataType
+        when 'code'
+          
+          if (data && data.status)
+            - re = new RegExp(/\W/, 'g')
+            - reCode = data.code.replace(re, '/')
+            - str = '<>'
+            h4.text-center.mt-3.mb-3.text-success 车次详情信息
+            .card
+              h4.card-header.text-center.text-info= reCode
+              .card-body
+                h4.card-title.d-flex.justify-content-center
+                  span.text-success #{data.codeheader.bstation} 
+                  span.text-center= str 
+                  span.text-danger #{data.codeheader.dstation}
+                h5.text-center.text-warning #{data.codeheader.ctype}
+                
+                .card-group
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 始发车站
+                      li.list-group-item.list-group-item-action= data.codeheader.bstation
+                      
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 终点车站
+                      li.list-group-item.list-group-item-action= data.codeheader.dstation
+                      
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 发车时间
+                      li.list-group-item.list-group-item-action= data.codeheader.ltime
+                      
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 到达时间
+                      li.list-group-item.list-group-item-action= data.codeheader.atime
+                      
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 列车全程
+                      li.list-group-item.list-group-item-action= data.codeheader.dist
+                      
+                  .card()
+                    ul.list-group.list-group-flush
+                      li.list-group-item 运行时间
+                      li.list-group-item.list-group-item-action= data.codeheader.ctime
+            
+                .card.mt-3
+                  .card-header
+                    | 票价详情
+                    span.badge.badge-warning.text-white.ml-1 仅供参考
+                  .card-body
+                    - types = ['高铁', '动车', '城际']
+                    if (types.includes(data.codeheader.ctype))
+                      each price in data.codeheader.price
+                        p.card-text
+                          span.mr-1= price.ptype
+                          span.mr-3 :
+                          span.text-success= price.price
+                          span （元）
+                      else
+                        p 暂无此车次票价详情
+                    else
+                      each price in data.codeheader.price
+                        p.card-text
+                          span.mr-1= price.ptype
+                          span.mr-3 :
+                          if (Array.isArray(price.price))
+                            case price.price.length
+                              when 3
+                                span.text-success.mr-3= price.price[0]
+                                  span.ml-1.badge.badge-info 上
+                                span.text-success.mr-3= price.price[1]
+                                  span.ml-1.badge.badge-info 中
+                                span.text-success.mr-3= price.price[2]
+                                  span.ml-1.badge.badge-info 下
+                              when 2
+                                span.text-success.mr-3= price.price[0]
+                                  span.ml-1.badge.badge-info 上
+                                span.text-success.mr-3= price.price[1]
+                                  span.ml-1.badge.badge-info 下
+                          else
+                            span.text-success= price.price
+
+                .card.mt-3
+                  h4.card-header.text-success 途径站点&nbsp
+                    span.badge.badge-pill.badge-info= data.station.length
+                  .card-body
+                    
+                    ul.list-group
+                      li.list-group-item.list-group-item-info
+                        ul.nav.nav-pills.nav-justified
+                          li.nav-item 站次
+                          li.nav-item 车站
+                          li.nav-item 到时
+                          li.nav-item 发车
+                          li.nav-item 里程
+                      each station in data.station
+                        li.list-group-item.list-group-item-action
+                          ul.nav.nav-pills.nav-justified
+                            li.nav-item= station.i
+                            a.nav-item(href='../station/' + station.station)= station.station
+                            li.nav-item= station.atime
+                            li.nav-item= station.ltime
+                            li.nav-item= station.dist
+                      else
+                        li.list-group-item.list-group-item-action
+                          .alert.alert-danger.mt-3(role='alert')
+                            h4.alert-heading ERROR!
+                            p.lead 源数据错误，暂无此车次详情
+                            hr
+                            p.mb-0 可在下方联系管理员
+                            
+                  .card-footer.text-warning.text-center 数据仅供参考, 请以官网为准
+          else
+            .alert.alert-danger.mt-3(role='alert')
+              h4.alert-heading ERROR!
+              p.lead 源数据错误，暂无此车次详情
+              hr
+              p.mb-0 可在下方联系管理员
+              
+        when 'station'
+          if(data)
+            h4.text-info.text-center
+              span.text-warning= station 
+              span  站详情
+            
+            .card
+              h4.card-header.text-success.text-center= station
+              .card-body
+                h4.card-title.text-info
+                  span 共有 
+                  span.text-success= data.length
+                  span  趟列车
+                  
+                ul.list-group
+                      li.list-group-item.list-group-item-info
+                        ul.nav.nav-pills.nav-justified
+                          li.nav-item 编号
+                          li.nav-item 车次
+                          li.nav-item 发车时间
+                          li.nav-item 到达时间
+                      each code, index in data
+                        li.list-group-item.list-group-item-action
+                          ul.nav.nav-pills.nav-justified
+                            li.nav-item= index + 1
+                            
+                            - re = new RegExp(/\W/, 'g')
+                            - reCode = code[0].code.replace(re, '/')
+
+                            a.nav-item(href='../code/' + code[0].code)= reCode
+                            li.nav-item= code[0].ltime
+                            li.nav-item= code[0].atime
+                      else
+                        li.list-group-item.list-group-item-action
+                          ul.nav.nav-pills.nav-justified
+                            li.nav-item --
+                            li.nav-item --
+                            li.nav-item --
+                            li.nav-item --
+              .card-footer.text-warning.text-center 数据仅供参考, 请以官网为准
+              
+          else
+            .alert.alert-danger.mt-3(role='alert')
+              h4.alert-heading ERROR!
+              p.lead 源数据错误，暂无此车站详情
+              hr
+              p.mb-0 可在下方联系管理员
+              
+        default
+          .alert.alert-danger.mt-3(role='alert')
+              h4.alert-heading ERROR!
+              p.lead 源数据错误，暂无所需信息
+              hr
+              p.mb-0 可在下方联系管理员

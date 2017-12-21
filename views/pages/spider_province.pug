@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  .container.mt-3
+    .jumbotron
+      // h3.text-secondary.display-5.text-center 爬虫控制台
+      - color = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark']
+      .card
+        h4.card-header.text-center.text-success 车站信息
+        .card-body
+          each province in provinces
+            - borderColor = 'border-' + color[Math.floor(Math.random()*color.length)]
+            .card.mb-3(class=borderColor)
+              h4.card-header(class=borderColor)= province.name
+                | &nbsp
+                span.badge.badge-pill.badge-info= province.station.length
+              .card-body
+                each item in province.station
+                  //- 产生随机颜色
+                  - randomColor = 'btn-outline-' + color[Math.floor(Math.random()*color.length)]
+                  - href = '/spider/station/' + item
+                  a.btn.mt-3.mr-3(class=randomColor, href=href, role='button')= item
+        .card-footer.text-center.text-warning 数据仅供参考, 请以官方为准

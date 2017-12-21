@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+  .jumbotron
+    h3.text-secondary.display-5.text-center 爬虫控制台
+    ul.nav.justify-content-center.mt-3.mb-3
+      .btn-group(role='group')
+        a.btn.btn-outline-success(href='/spider/code') 车次查看
+        a.btn.btn-outline-success(href='/spider/station') 车站查看
+        
+    ul.nav.justify-content-center.mt-3.mb-3
+      // Button trigger modal
+      a.btn.btn-outline-primary(role='button', data-toggle='modal', data-target='#controlModal', href='#')
+        | 爬虫高级控制
+        // Modal
+      #controlModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='controlModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+          .modal-content
+            .modal-header
+              h5#controlModalLabel.modal-title.text-secondary
+                | 爬虫高级控制&nbsp
+                span.badge.badge-pill.badge-warning.text-white 请按步骤进行
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span.text-danger(aria-hidden='true') &times
+            .modal-body.justify-content-center.text-center
+              ul.nav.justify-content-center.mt-3.mb-3
+                a.btn.btn-outline-warning.mr-3.mt-2(role='button', href='/spider/getstation')
+                  | 爬取所有车站&nbsp
+                  span.badge.badge-warning.text-white 1
+                a.btn.btn-outline-warning.mr-3.mt-2(role='button', href='/spider/getlocate')
+                  | 爬取车站位置&nbsp
+                  span.badge.badge-warning.text-white 2
+              ul.nav.justify-content-center.mt-3.mb-3
+                a.btn.btn-outline-warning.mr-3.mt-2(role='button', href='/spider/getcode')
+                  | 爬取所有车次&nbsp
+                  span.badge.badge-warning.text-white 3
+                a.btn.btn-outline-warning.mr-3.mt-2(role='button', href='/spider/getprovince')
+                  | 爬取省份信息&nbsp
+                  span.badge.badge-warning.text-white 4
+            .modal-footer.justify-content-center.text-center
+              a.btn.btn-secondary.pl-5.pr-5(role='button', data-dismiss='modal', href='#') 关闭
+                
+    ul.nav.justify-content-center.mt-3.mb-3
+      .btn-group(role='group')
+        a.btn.btn-outline-danger(role='button', href='#', data-toggle='modal', data-target='#codeModal') 清空车次信息
+        a.btn.btn-outline-danger(role='button', href='#', data-toggle='modal', data-target='#stationModal') 清空车站信息
+      #codeModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='codeModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+          .modal-content
+            .modal-header
+              h5#codeModalLabel.modal-title.text-warning 确定要清空吗?
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span.text-danger(aria-hidden='true') &times
+            .modal-body.text-center
+              a.btn.btn-success.mr-3.pl-4.pr-4(data-dismiss='modal', role='button', href='#') 取消
+              a.btn.btn-danger.pl-4.pr-4(role='button', href='#') 确定
+      #stationModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='stationModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+          .modal-content
+            .modal-header
+              h5#stationModalLabel.modal-title.text-warning 确定要清空吗?
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span.text-danger(aria-hidden='true') &times
+            .modal-body.text-center
+              a.btn.btn-success.mr-3.pl-4.pr-4(data-dismiss='modal', role='button', href='#') 取消
+              a.btn.btn-danger.pl-4.pr-4(role='button', href='#') 确定
+  // .container.mt-3
+  //   .jumbotron

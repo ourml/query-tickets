@@ -1,184 +1,43 @@
 extends ../layout
 
 block content
-  include ../includes/navbar
-  
-  - var trainType = 'K599'
-  - var startTime = '05:14'
-  
   .container.mt-3
-    table.table
-      thead.thead-dark.text-white.bg-dark
-        tr
-          th(scope='col') Type
-          th(scope='col') startTime
-          th(scope='col') totalTime
-          th(scope='col') endTime
-          th(scope='col') price
-          th(scope='col') comment
-      tbody
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-    table.table
-      thead.thead-dark.text-white.bg-dark
-        tr
-          th(scope='col') Type
-          th(scope='col') startTime
-          th(scope='col') totalTime
-          th(scope='col') endTime
-          th(scope='col') price
-          th(scope='col') comment
-      tbody
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-        tr
-          th(scope='row') K599
-          td 05:20
-          td 12
-          td 17:20
-          td $10
-          td
-            ul.list-unstyled
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-              li
-                span.mr-3 aaaadfadadasdf
-                span bbb
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  include ../includes/footer
+    .jumbotron
+      case dataType
+        when 'ticket'
+          h3.text-success.text-center= from
+            | &nbsp至&nbsp
+            = to
+          p.lead.text-info.text-center
+            strong= date
+          .card
+            h4.card-header.text-center 车次详情
+            .card-body
+              ul.list-group
+                li.list-group-item.list-group-item-info
+                  ul.nav.nav-pills.nav-justified
+                    li.nav-item 车次
+                    li.nav-item 出发时间
+                    li.nav-item 到达时间
+                    li.nav-item 所需时间
+                    li.nav-item 余票情况
+                    li.nav-item 更多操作
+                each item in data
+                  li.list-group-item.list-group-item-action
+                    ul.nav.nav-pills.nav-justified.d-flex.align-items-center
+                      a.nav-item(href='/spider/code/' + item.code)= item.code
+                      li.nav-item= item.times[0]
+                      li.nav-item= item.times[1]
+                      li.nav-item= item.times[2]
+                      li.nav-item= ticketStatus ? '有' : '无'
+                      li.nav-item
+                        a.btn.btn-outline-success(href='/query/' + item.code + '/' + date + '/' + from + '/' + to) 余票详情
+            .card-footer.text-warning.text-center 以上数据同源于12306客运服务中心
+        when 'detail'
+          p.lead detail
+        default
+          .alert.alert-danger.mt-3(role='alert')
+              h4.alert-heading ERROR!
+              p.lead 源数据错误，暂无所需信息
+              hr
+              p.mb-0 可在下方联系管理员

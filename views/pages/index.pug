@@ -1,24 +1,21 @@
 extends ../layout
 
 block content
-  include ../includes/navbar
-
+  link(rel='stylesheet', href='https://unpkg.com/js-datepicker/datepicker.css')
   .jumbotron.d-none.d-lg-block
-    .container
-      .row
-        h1.display-3 Hello World!
-        p This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.
-        p
-          a.btn.btn-primary.btn-lg(href='#', role='button') Learn more &raquo;
-  
-  
-  
+    .container.text-center
+      h1.text-center 火车票查询系统
+      p.lead.text-success.mt-3 实时查询车票信息
+      p.lead.text-warning 国内车次详细信息
+      p.lead.text-info 国内各省车站车次信息
+      p
+        a.btn.btn-primary.btn-lg(href='/spider', role='button') 爬虫控制台 &raquo;
   .container.mt-3.mb-3
     .row
       .col-12.text-center
         .btn-group(role='group')
           //- round trip ticket
-          button(type='button', data-toggle='modal', data-target='#doubleTrip').btn.btn-lg.btn-outline-info 往返票
+          a(role='button', data-toggle='modal', data-target='#doubleTrip', href='#').btn.btn-lg.btn-outline-info 往返票
           //- Modal content begin
           .modal.fade#doubleTrip(tabindex='-1', role='dialog', aria-labelledby='doubleTripTitle', aria-hidden='true')
             .modal-dialog(role='document')
@@ -40,8 +37,8 @@ block content
                           label(for='toStation') 目的站
                           input(type='text',name='toStation' placeholder='终点城市/车站名').form-control#toStation
                         .form-group.col-md-6
-                          label(for='outDate') 出发日期
-                          input(type='text', name='outDate').form-control#outDate
+                          label(for='date') 出发日期
+                          input(type='text', name='date').form-control#date
                         .form-group.col-md-6
                           label(for='inDate') 返程日期
                           input(type='text', name='inDate').form-control#inDate
@@ -56,14 +53,11 @@ block content
                         .form-group.col-md-6
                           .btn-group(data-toggle='buttons').mt-1
                             label.btn.btn-outline-info.active
-                              input(type='radio',name='trainType', autocomplete='off', value='allTrain', checked)
+                              input(type='radio',name='trainType', autocomplete='off', value='all', checked)
                               | 全部车次
                             label.btn.btn-outline-info
                               input(type='radio',name='trainType', value='tgdc', autocomplete='off')
-                              | 快速
-                            label.btn.btn-outline-info
-                              input(type='radio',name='trainType', value='zk', autocomplete='off')
-                              | 普快
+                              | T/G/D
                             label.btn.btn-outline-info
                               input(type='radio',name='trainType', value='others', autocomplete='off')
                               | 其他
@@ -72,13 +66,12 @@ block content
                 //- modal footer
                 .modal-footer
                   button.btn.btn-outline-danger(type='button', data-dismiss='modal') 取消
-          button(type='button').btn.btn-lg.btn-outline-info.active 单程票
+          a(role='button', href='#').btn.btn-lg.btn-outline-info.active 单程票
     //- query single trip ticket form
     .row.mt-3
       .col-12
         .card
-          .card-header
-            h3.text-center 单程票查询
+          h3.card-header.text-center 单程票查询
           .card-body
             .container-fluid
               form(action='/query', method='post')
@@ -102,36 +95,13 @@ block content
                         | 学生票
                     .btn-group(data-toggle='buttons').mt-1
                       label.btn.btn-outline-info.active
-                        input(type='radio',name='trainType', autocomplete='off', value='allTrain', checked)
+                        input(type='radio',name='trainType', autocomplete='off', value='all', checked)
                         | 全部车次
                       label.btn.btn-outline-info
                         input(type='radio',name='trainType', value='tgdc', autocomplete='off')
-                        | 快速
-                      label.btn.btn-outline-info
-                        input(type='radio',name='trainType', value='zk', autocomplete='off')
-                        | 普快
+                        | T/G/D
                       label.btn.btn-outline-info
                         input(type='radio',name='trainType', value='others', autocomplete='off')
                         | 其他
                   .form-group.col-12.text-center
-                    button(type='submit').btn.btn-lg.btn-outline-success.btn-block 查询
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  include ../includes/footer
+                    button(type='submit', style='cursor: pointer;').btn.btn-lg.btn-outline-success.btn-block 查询

@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  .container.mt-3
+    .jumbotron
+      // h3.text-secondary.display-5.text-center 爬虫控制台
+      
+      .container
+        ul.nav.mb-3.justify-content-center
+          .btn-group(role='group')
+            button.btn.btn-outline-success 车次
+            button.btn.btn-outline-success 途径站点数
+            button.btn.btn-outline-success 途径站点
+        
+        .row
+          .col-2
+            #list-tab.list-group(role='tablist')
+              a#list-home-list.list-group-item.list-group-item-action.active(data-toggle='list', href='#list-home', role='tab', aria-controls='home') 全部车次详情
+              each train in trains
+                - idName = 'list-' + train.code + '-list'
+                - href = '#list-' + train.code
+
+                a.list-group-item.list-group-item-action(id=idName data-toggle='list', href=href, role='tab', aria-controls=train.code)= train.code
+
+          .col-10
+            #nav-tabContent.tab-content
+              #list-home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='list-home-list')
+                .container
+                  h3 显示所有车次的详细信息
+              each train in trains
+                - contentId = 'list-' + train.code
+                - al = 'list-' + train.code + '-list'
+                .tab-pane.fade(id=contentId role='tabpanel', aria-labelledby=al)
+                  .container
+                    .list-group
+                      h3
+                        | 途径站点：
+                        span.text-success= train.length
+                      each item in train.codedetails
+                        - itemHref = '/spider/station/' + item
+                        a.list-group-item.list-group-item-action(href=itemHref)
+                          span= item
