@@ -32,35 +32,35 @@ block content
                       .form-row
                         .form-group.col-md-6
                           label(for='fromStation') 出发站
-                          input(type='text',name='fromStation' placeholder='起点城市/车站名').form-control#fromStation
+                          input(type='text', name='fromStation', placeholder='起点城市/车站名', required).form-control#fromStation
                         .form-group.col-md-6
                           label(for='toStation') 目的站
-                          input(type='text',name='toStation' placeholder='终点城市/车站名').form-control#toStation
+                          input(type='text',name='toStation', placeholder='终点城市/车站名', required).form-control#toStation
                         .form-group.col-md-6
                           label(for='date') 出发日期
-                          input(type='text', name='date').form-control#date
+                          input(type='text', name='date', placeholder='2017-12-26', required).form-control#date
                         .form-group.col-md-6
-                          label(for='inDate') 返程日期
-                          input(type='text', name='inDate').form-control#inDate
+                          label(for='backDate') 返程日期
+                          input(type='text', name='backDate', placeholder='2017-12-29', required).form-control#backDate
                         .form-group.col-md-6
                           .btn-group(data-toggle='buttons').mt-1
                             label.btn.btn-outline-info.active
-                              input(type='radio', name='ticketType', autocomplete='off', value='adult', checked)#adult
+                              input(type='radio', name='ticketType', autocomplete='off', value='ADULT', checked)#adult
                               | 普通票
                             label.btn.btn-outline-info.mr-1
-                              input(type='radio', name='ticketType', autocomplete='off', value='student')#student
+                              input(type='radio', name='ticketType', autocomplete='off', value='STU')#student
                               | 学生票
                         .form-group.col-md-6
                           .btn-group(data-toggle='buttons').mt-1
-                            label.btn.btn-outline-info.active
-                              input(type='radio',name='trainType', autocomplete='off', value='all', checked)
-                              | 全部车次
-                            label.btn.btn-outline-info
-                              input(type='radio',name='trainType', value='tgdc', autocomplete='off')
-                              | T/G/D
-                            label.btn.btn-outline-info
-                              input(type='radio',name='trainType', value='others', autocomplete='off')
-                              | 其他
+                            // label.btn.btn-outline-info.active
+                            //   input(type='radio',name='trainType', autocomplete='off', value='all', checked)
+                            //   | 全部车次
+                            // label.btn.btn-outline-info
+                            //   input(type='radio',name='trainType', value='tgdc', autocomplete='off')
+                            //   | T/G/D
+                            // label.btn.btn-outline-info
+                            //   input(type='radio',name='trainType', value='others', autocomplete='off')
+                            //   | 其他
                         .form-group.col-12.text-center
                           button(type='submit').btn.btn-lg.btn-outline-success.btn-block 查询
                 //- modal footer
@@ -78,30 +78,30 @@ block content
                 .form-row
                   .form-group.col-md-6
                     label(for='fromStation') 出发站
-                    input(type='text',name='fromStation' placeholder='请输入起点城市/车站名').form-control#fromStation
+                    input(type='text',name='fromStation', placeholder='请输入起点城市/车站名', required).form-control#fromStation
                   .form-group.col-md-6
                     label(for='toStation') 目的站
-                    input(type='text',name='toStation' placeholder='请输入终点城市/车站名').form-control#toStation
+                    input(type='text',name='toStation', placeholder='请输入终点城市/车站名', required).form-control#toStation
                   .form-group.col-md-6
                     label(for='date') 日期
-                    input(type='text', name='date').form-control#date
+                    input(type='text', name='date', placeholder='2017-12-26', required).form-control#date
                   .form-group.col-md-6.align-self-end
                     .btn-group(data-toggle='buttons').mt-1
                       label.btn.btn-outline-info.active
-                        input(type='radio', name='ticketType', autocomplete='off', value='adult', checked)#adult
+                        input(type='radio', name='ticketType', autocomplete='off', value='ADULT', checked)#adult
                         | 普通票
                       label.btn.btn-outline-info.mr-1
-                        input(type='radio', name='ticketType', autocomplete='off', value='student')#student
+                        input(type='radio', name='ticketType', autocomplete='off', value='STU')#student
                         | 学生票
                     .btn-group(data-toggle='buttons').mt-1
-                      label.btn.btn-outline-info.active
-                        input(type='radio',name='trainType', autocomplete='off', value='all', checked)
-                        | 全部车次
-                      label.btn.btn-outline-info
-                        input(type='radio',name='trainType', value='tgdc', autocomplete='off')
-                        | T/G/D
-                      label.btn.btn-outline-info
-                        input(type='radio',name='trainType', value='others', autocomplete='off')
-                        | 其他
+                      // label.btn.btn-outline-info.active
+                      //   input(type='radio',name='trainType', autocomplete='off', value='all', checked)
+                      //   | 全部车次
+                      // label.btn.btn-outline-info
+                      //   input(type='radio',name='trainType', value='tgdc', autocomplete='off')
+                      //   | T/G/D
+                      // label.btn.btn-outline-info
+                      //   input(type='radio',name='trainType', value='others', autocomplete='off')
+                      //   | 其他
                   .form-group.col-12.text-center
                     button(type='submit', style='cursor: pointer;').btn.btn-lg.btn-outline-success.btn-block 查询

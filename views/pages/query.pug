@@ -31,10 +31,75 @@ block content
                       li.nav-item= item.times[2]
                       li.nav-item= ticketStatus ? '有' : '无'
                       li.nav-item
-                        a.btn.btn-outline-success(href='/query/' + item.code + '/' + date + '/' + from + '/' + to) 余票详情
+                        a.btn.btn-outline-success(href='/query/' + item.code + '/' + date + '/' + from + '/' + to) 更多详情
             .card-footer.text-warning.text-center 以上数据同源于12306客运服务中心
         when 'detail'
-          p.lead detail
+          h3.text-success.text-center= from
+            | &nbsp至&nbsp
+            = to
+          .lead.text-info.text-center
+            strong= date
+          .lead.text-info.text-center
+            strong.text-muted= data[0].traintype
+          .card
+            h4.card-header
+              span.text-warning.mr-1= code
+            .card-body
+              .card-group
+                each item in data
+                  .card().mt-1
+                    ul.list-group.list-group-flush
+                      li.list-group-item 发车时间
+                      li.list-group-item.list-group-item-action= item.dpttime
+                  .card().mt-1
+                    ul.list-group.list-group-flush
+                      li.list-group-item 到达时间
+                      li.list-group-item.list-group-item-action= item.arrtime
+                  .card().mt-1
+                    ul.list-group.list-group-flush
+                      li.list-group-item 到达日期
+                      li.list-group-item.list-group-item-action= item.arrdate
+                  .card().mt-1
+                    ul.list-group.list-group-flush
+                      li.list-group-item 里程
+                      li.list-group-item.list-group-item-action= item.intervalmiles
+                  .card().mt-1
+                    ul.list-group.list-group-flush
+                      li.list-group-item 历时
+                      li.list-group-item.list-group-item-action= item.interval
+              h3.text-center.mt-3.text-success 票价详情
+              .card-deck.mt-3
+                // - color = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark']
+                each item in data
+                  each seat, key in item.seats
+                    // - borderColor = 'border-' + color[Math.floor(Math.random()*color.length)]
+                    if seat.count < 20
+                      - borderColor = 'border-danger'
+                    else if seat.count < 40
+                      - borderColor = 'border-warning'
+                    else
+                      - borderColor = 'border-success'
+                    .card.mt-1(class=borderColor)
+                      .card-body
+                        h4.card-title
+                          strong= key
+                        p.card-text
+                          span 票价 
+                          span : 
+                          span.text-success= seat.price
+                          span  元
+                        p.card-text
+                          span 余票 
+                          span : 
+                          strong.text-success= seat.count
+              ul.nav.navbar-light.bg-light.justify-content-center.mt-3.p-1
+                li.nav-item
+                  a.nav-link(href='/spider/station/' + data[0].sstation)= data[0].sstation
+                li.nav-item
+                  span.nav-link 至
+                li.nav-item
+                  a.nav-link(href='/spider/station/' + data[0].estation).text-danger= data[0].estation
+            .card-footer.text-center.text-warning 数据仅供参考，请以购买票价为准
         default
           .alert.alert-danger.mt-3(role='alert')
               h4.alert-heading ERROR!
