@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const request = require('request');
+const async = require('async')
 
 let StationName = require('../models/station-name.model')
 
@@ -236,12 +237,143 @@ router.post('/', function(req, res, next) {
     console.log(`backDate: ${backDate}`)
     console.log(`ticketType: ${ticketType}`)
     console.log(`trainType: ${trainType}`)
-    const query = (date, fromStation, toStation, ticketType) => {
-      let query = '?leftTicketDTO.train_date=' + date
-      return query
+
+    const query = (fromStation, toStation, callback) => {
+      let queryArr = []
+      StationName
+        .findOne({ name: fromStation })
+        .exec((err, result) => {
+          err && callback(null, err)
+          if (result) {
+            queryArr.push(result.aliascode)
+          }
+          else {
+            console.log(`无法获取相关数据`)
+          }
+        })
+      StationName
+        .findOne({ name: toStation })
+        .exec((err, result) => {
+          err && callback(null, err)
+          if (result) {
+            queryArr.push(result.aliascode)
+            callback(null, queryArr)
+          }
+          else {
+            callback(null, err)
+            console.log(`无法获取相关数据`)
+          }
+        })
     }
 
-    console.log(query(date, fromStation, toStation, ticketType))
+    query(fromStation, toStation, (err, result) => {
+      err && console.log(err)
+      console.log(result)
+      let queryArr = []
+      const query1 = '?leftTicketDTO.train_date=' +
+        date +
+        '&leftTicketDTO.from_station=' +
+        result[0] +
+        '&leftTicketDTO.to_station=' +
+        result[1] +
+        '&purpose_codes=' +
+        ticketType
+      const query2 = '?leftTicketDTO.train_date=' +
+        backDate +
+        '&leftTicketDTO.from_station=' +
+        result[1] +
+        '&leftTicketDTO.to_station=' +
+        result[0] +
+        '&purpose_codes=' +
+        ticketType
+      queryArr.push(query1)
+      queryArr.push(query2)
+      async.mapLimit(queryArr, 2, (query, callback) => {
+
+        const apiURL = 'https://kyfw.12306.cn/otn/leftTicket/query'
+        // const apiURL = 'https://www.baidu.com'
+        const originURL = apiURL + query
+        console.log(originURL)
+        request.get(originURL, (err, response, body) => {
+          err && console.log(err)
+          try {
+            let fresult = JSON.parse(body)
+            // let ttt = '{"validateMessagesShowId":"_validatorMessage","status":true,"httpstatus":200,"data":{"result":["null|23:00-06:00系统维护时间|630000K8270J|K830|GZQ|CDW|YLZ|YSZ|01:56|07:32|05:36|IS_TIME_NOT_BUY|kAuTOa9voM1dgeVeuCE%2BgTGhGBS1ajOaV2pzerPZJExDnkfAaLUs0VLgiM8%3D|20171224|3|QZ|08|11|0|0||||13|||无||11|有|||||10401030|1413|1","null|23:00-06:00系统维护时间|71000055380K|5538|ZJZ|JJZ|YLZ|YSZ|15:32|21:01|05:29|IS_TIME_NOT_BUY|BjjNApm%2BJMMeuJDPdzFQPb8CQVljnnn1|20171225|3|Z1|06|11|0|0|||||||有|||有|||||1010|11|1","null|23:00-06:00系统维护时间|710000K8720E|K872|ZJZ|CQW|YLZ|YSZ|18:57|00:42|05:45|IS_TIME_NOT_BUY|p3Cl%2F51sIj8bE8VQy4lp7i6LfmLyTJGYBNaIVbC7UTihrr2WL0jDXTAHINE%3D|20171225|3|Z1|07|11|0|0||||有|||无||有|有|||||10401030|1413|1"],"flag":"1","map":{"YLZ":"玉林","YSZ":"宜州"}},"messages":[],"validateMessages":{}}'
+            // let fresult = JSON.parse(ttt)
+            let status = fresult.status
+            let httpstatus = fresult.httpstatus
+            let messages = fresult.messages
+            let data = fresult.data
+
+            if (status && httpstatus === 200 && data) {
+              let result = data.result
+              let flag = data.flag
+              let map = data.map
+              let msg = []
+              let gotData = []
+              let ticketStatus = 0
+
+              if (result) {
+                result.forEach(element => {
+                  let msg = element.split('|')
+                  let tmpTime = []
+                  msg.forEach(item => {
+                    if (item.includes(':')) {
+                      tmpTime.push(item)
+                    }
+                  })
+                  if (msg.includes('有')) {
+                    ticketStatus = 1
+                  }
+                  gotData.push({
+                    code: msg[3],
+                    times: tmpTime
+                  })
+                })
+                callback(null, gotData)
+              }
+              else {
+                // res.send('error has occurred.1')
+                callback(null, `err 2`)
+                console.log(`暂无此信息`)
+              }
+            }
+            else {
+              // res.send('error has occurred.2')
+              callback(null, `err 1`)
+              console.log(messages)
+            }
+          }
+          catch (e) {
+            // res.send('errors has occurred. 3')
+            callback(null, e)
+            // console.log(e)
+          }
+
+        })
+      }, (err, result) => {
+        // err && console.log(err)
+        if (err) {
+          res.send('error 11')
+          console.log(err)
+        }
+        else {
+          console.log(result)
+          res.render('query', {
+            title: '车票详情',
+            from: req.body.fromStation,
+            to: req.body.toStation,
+            date: date,
+            backdate: backDate,
+            dataType: 'double',
+            data: result
+          })
+          // res.send('ok')
+        }
+        // res.send('aaa')
+      })
+
+    })
   }
   else {
     // console.log(`单程票`)
@@ -346,65 +478,66 @@ router.post('/', function(req, res, next) {
           console.log(e)
         }
 
-        // if (JSON.parse(body)) {
-        //   let fresult = JSON.parse(body)
-        //   let status = fresult.status
-        //   let httpstatus = fresult.httpstatus
-        //   let messages = fresult.messages
-        //   let data = fresult.data
-
-        //   if (status && httpstatus === 200 && data) {
-        //     let result = data.result
-        //     let flag = data.flag
-        //     let map = data.map
-        //     let msg = []
-        //     let gotData = []
-        //     let ticketStatus = 0
-
-        //     if (result) {
-        //       result.forEach(element => {
-        //         let msg = element.split('|')
-        //         let tmpTime = []
-        //         msg.forEach(item => {
-        //           if (item.includes(':')) {
-        //             tmpTime.push(item)
-        //           }
-        //         })
-        //         if (msg.includes('有')) {
-        //           ticketStatus = 1
-        //         }
-        //         gotData.push({
-        //           code: msg[3],
-        //           times: tmpTime
-        //         })
-        //       })
-        //       res.render('query', {
-        //         title: '车票详情',
-        //         from: req.body.fromStation,
-        //         to: req.body.toStation,
-        //         date: date,
-        //         ticketStatus: ticketStatus,
-        //         dataType: 'ticket',
-        //         data: gotData
-        //       })
-        //     }
-        //     else {
-        //       res.send('error has occurred.1')
-        //       console.log(`暂无此信息`)
-        //     }
-        //   }
-        //   else {
-        //     res.send('error has occurred.2')
-        //     console.log(messages)
-        //   }
-        // }
-        // else {
-        //   console.log(`资源获取出错`)
-        //   res.send(`资源获取出错`)
-        // }
       })
     })
   }
 })
 
 module.exports = router;
+
+// if (JSON.parse(body)) {
+//   let fresult = JSON.parse(body)
+//   let status = fresult.status
+//   let httpstatus = fresult.httpstatus
+//   let messages = fresult.messages
+//   let data = fresult.data
+
+//   if (status && httpstatus === 200 && data) {
+//     let result = data.result
+//     let flag = data.flag
+//     let map = data.map
+//     let msg = []
+//     let gotData = []
+//     let ticketStatus = 0
+
+//     if (result) {
+//       result.forEach(element => {
+//         let msg = element.split('|')
+//         let tmpTime = []
+//         msg.forEach(item => {
+//           if (item.includes(':')) {
+//             tmpTime.push(item)
+//           }
+//         })
+//         if (msg.includes('有')) {
+//           ticketStatus = 1
+//         }
+//         gotData.push({
+//           code: msg[3],
+//           times: tmpTime
+//         })
+//       })
+//       res.render('query', {
+//         title: '车票详情',
+//         from: req.body.fromStation,
+//         to: req.body.toStation,
+//         date: date,
+//         ticketStatus: ticketStatus,
+//         dataType: 'ticket',
+//         data: gotData
+//       })
+//     }
+//     else {
+//       res.send('error has occurred.1')
+//       console.log(`暂无此信息`)
+//     }
+//   }
+//   else {
+//     res.send('error has occurred.2')
+//     console.log(messages)
+//   }
+// }
+// else {
+//   console.log(`资源获取出错`)
+//   res.send(`资源获取出错`)
+// }
