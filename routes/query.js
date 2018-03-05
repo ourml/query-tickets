@@ -288,9 +288,9 @@ router.post('/', function(req, res, next) {
         ticketType
       queryArr.push(query1)
       queryArr.push(query2)
-      async.mapLimit(queryArr, 2, (query, callback) => {
+      async.mapLimit(queryArr, 1, (query, callback) => {
 
-        const apiURL = 'https://kyfw.12306.cn/otn/leftTicket/query'
+        const apiURL = 'https://kyfw.12306.cn/otn/leftTicket/queryZ'
         // const apiURL = 'https://www.baidu.com'
         const originURL = apiURL + query
         console.log(originURL)
@@ -365,6 +365,7 @@ router.post('/', function(req, res, next) {
             to: req.body.toStation,
             date: date,
             backdate: backDate,
+            ticketStatus: '1',
             dataType: 'double',
             data: result
           })
@@ -415,7 +416,7 @@ router.post('/', function(req, res, next) {
       err && console.log(err)
       // console.log(result)
 
-      const apiURL = 'https://kyfw.12306.cn/otn/leftTicket/query'
+      const apiURL = 'https://kyfw.12306.cn/otn/leftTicket/queryZ'
       // const apiURL = 'https://www.baidu.com'
       const originURL = apiURL + result
 
