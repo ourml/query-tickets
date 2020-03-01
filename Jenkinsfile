@@ -1,12 +1,13 @@
 pipeline {
   agent {
-    node {
-      label 'query-ticket'
+    docker {
+      image 'node:10.13.0-alpine'
+      args '-p 3001:3000'
     }
 
   }
   stages {
-    stage('build') {
+    stage('Build') {
       steps {
         sh 'npm install'
         sh 'npm start'
