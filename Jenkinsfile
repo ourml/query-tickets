@@ -15,9 +15,7 @@ pipeline {
 
     stage('Deliver') {
       steps {
-        sh 'set -x'
         sh 'npm start &'
-        sh 'set +x'
       }
     }
 
